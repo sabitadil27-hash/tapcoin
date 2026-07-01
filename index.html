@@ -1,29 +1,8 @@
-let coins = 0;
-let tapPower = 1;
+<p>Монеты: <span id="coins">0</span></p>
+<p>Сила тапа: <span id="power">1</span></p>
 
-// Тап
-function tapCoin() {
-  coins += tapPower;
-  updateUI();
-}
+<button onclick="tapCoin()">Тап</button>
 
-// Магазин
-function buyUpgrade(type) {
-  if (type === "tap1" && coins >= 100) {
-    coins -= 100;
-    tapPower += 1;
-  }
-
-  if (type === "tap5" && coins >= 500) {
-    coins -= 500;
-    tapPower += 5;
-  }
-
-  updateUI();
-}
-
-// Обновление текста
-function updateUI() {
-  document.getElementById("coins").innerText = coins;
-  document.getElementById("power").innerText = tapPower;
-}
+<h3>Магазин</h3>
+<button onclick="buyUpgrade('tap1')">+1 тап (100)</button>
+<button onclick="buyUpgrade('tap5')">+5 тап (500)</button>
