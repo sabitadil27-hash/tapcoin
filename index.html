@@ -1,58 +1,157 @@
-let coins = 100000;
-let tapPower = 1;
-let energy = 100;
-let friends = 0;
-let battlePassLevel = 1;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap Coin v0.2</title>
 
-// Тап
-function tapCoin() {
-  if (energy > 0) {
-    coins += tapPower;
-    energy--;
-    updateUI();
-  }
+<style>
+body{
+margin:0;
+font-family:Arial;
+background: radial-gradient(circle at top,#1f2937,#0b0f19);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
 }
 
-// Магазин
-function buyUpgrade(type) {
-  if (type === "tap1" && coins >= 25000) {
-    coins -= 25000;
-    tapPower += 1;
-  }
-
-  if (type === "energy" && coins >= 80000) {
-    coins -= 80000;
-    energy += 100;
-  }
-
-  if (type === "vip" && coins >= 2000000) {
-    coins -= 2000000;
-    tapPower *= 2;
-  }
-
-  updateUI();
+.game{
+text-align:center;
 }
 
-// Друзья
-function inviteFriend() {
-  friends++;
-  coins += 100000;
-  updateUI();
+.top{
+display:flex;
+justify-content:space-between;
+width:300px;
+margin-bottom:30px;
+font-size:18px;
+opacity:0.9;
 }
 
-// Battle Pass
-function levelUpPass() {
-  if (coins >= 500000) {
-    coins -= 500000;
-    battlePassLevel++;
-  }
-  updateUI();
+.card{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:15px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 20px rgba(0,0,0,0.5);
 }
 
-// UI
-function updateUI() {
-  document.getElementById("coins").innerText = coins;
-  document.getElementById("energy").innerText = energy;
-  document.getElementById("friends").innerText = friends;
-  document.getElementById("pass").innerText = battlePassLevel;
+.coin{
+font-size:130px;
+cursor:pointer;
+user-select:none;
+transition:0.1s;
+filter:drop-shadow(0 0 10px gold);
 }
+
+.coin:active{
+transform:scale(0.9);
+}
+
+.plus{
+position:absolute;
+color:gold;
+font-weight:bold;
+animation:fly 0.6s ease-out forwards;
+}
+
+@keyframes fly{
+0%{opacity:1; transform:translateY(0);}
+100%{opacity:0; transform:translateY(-80px);}
+}
+
+.btn{
+margin-top:20px;
+padding:10px 15px;
+border:none;
+border-radius:10px;
+background:#facc15;
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<div class="top">
+<div>🪙 <span id="coins">0</span></div>
+<div>⚡ <span id="energy">100</span></div>
+</div>
+
+<div class="card">
+
+<div class="coin" onclick="tap(event)">🪙</div>
+
+<button class="btn" onclick="upgrade()">Upgrade +1</button>
+
+</div>
+
+</div>
+
+<script>
+let coins = Number(localStorage.getItem("coins")) || 0;
+let energy = Number(localStorage.getItem("energy")) || 100;
+let power = Number(localStorage.getItem("power")) || 1;
+
+function update(){
+document.getElementById("coins").innerText = coins;
+document.getElementById("energy").innerText = energy;
+}
+
+update();
+
+function tap(e){
+if(energy <= 0) return;
+
+coins += power;
+energy--;
+
+update();
+
+localStorage.setItem("coins",coins);
+localStorage.setItem("energy",energy);
+
+let plus = document.createElement("div");
+plus.className = "plus";
+plus.innerText = "+"+power;
+plus.style.left = e.clientX + "px";
+plus.style.top = e.clientY + "px";
+
+document.body.appendChild(plus);
+
+setTimeout(()=>plus.remove(),600);
+}
+
+function upgrade(){
+if(coins >= 50){
+coins -= 50;
+power++;
+
+update();
+localStorage.setItem("coins",coins);
+localStorage.setItem("power",power);
+alert("Upgraded! +1 power");
+}else{
+alert("Not enough coins!");
+}
+}
+
+setInterval(()=>{
+if(energy < 100){
+energy++;
+update();
+localStorage.setItem("energy",energy);
+}
+},1000);
+
+</script>
+
+</body>
+</html>
