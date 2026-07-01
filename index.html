@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap Coin</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#111827;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+text-align:center;
+}
+
+h1{
+font-size:40px;
+margin-bottom:20px;
+}
+
+#coins{
+color:gold;
+}
+
+.coin{
+font-size:120px;
+cursor:pointer;
+transition:.1s;
+user-select:none;
+}
+
+.coin:active{
+transform:scale(.9);
+}
+
+.energy{
+margin-top:20px;
+font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🪙 <span id="coins">0</span></h1>
+
+<div class="coin" onclick="tap()">
+🪙
+</div>
+
+<div class="energy">
+⚡ Energy: <span id="energy">100</span>/100
+</div>
+
+</div>
+
+<script>
+let coins=Number(localStorage.getItem("coins"))||0;
+let energy=Number(localStorage.getItem("energy"))||100;
+
+document.getElementById("coins").innerHTML=coins;
+document.getElementById("energy").innerHTML=energy;
+
+function tap(){
+
+if(energy<=0)return;
+
+coins++;
+energy--;
+
+document.getElementById("coins").innerHTML=coins;
+document.getElementById("energy").innerHTML=energy;
+
+localStorage.setItem("coins",coins);
+localStorage.setItem("energy",energy);
+
+}
+
+setInterval(()=>{
+
+if(energy<100){
+
+energy++;
+
+document.getElementById("energy").innerHTML=energy;
+
+localStorage.setItem("energy",energy);
+
+}
+
+},1000);
+
+</script>
+
+</body>
+</html>
